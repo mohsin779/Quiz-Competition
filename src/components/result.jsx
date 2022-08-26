@@ -5,7 +5,7 @@ const Result = (props) => {
 
   return (
     <>
-      <h1>Your Score: {score} </h1>;
+      <h1>Your Score: {score} </h1>
     </>
   );
 };

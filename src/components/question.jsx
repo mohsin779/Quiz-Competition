@@ -1,4 +1,3 @@
-import Options from "./options";
 import { RadioGroup, RadioButton } from "react-radio-buttons";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -35,10 +34,17 @@ const Question = () => {
         { option: "No, not at all.", answer: false },
       ],
     },
+    // {
+    //   question: "کیا ہیگزا والوں کو اس ہفتے پیٹرول کا کارڈ مل جائے گا؟",
+    //   answers: [
+    //     { option: "بلکل بھی نہیں۔", answer: true },
+    //     { option: "جی ہاں۔", answer: false },
+    //   ],
+    // },
     {
-      question: "کیا ہیگزا والوں کو اس ہفتے پیٹرول کا کارڈ مل جائے گا؟",
+      question: "کیا ذیشان بھائی آج کل جم جا رہے ہیں؟",
       answers: [
-        { option: "بلکل بھی نہیں۔", answer: true },
+        { option: "کبھی کبار۔", answer: true },
         { option: "جی ہاں۔", answer: false },
       ],
     },
@@ -59,20 +65,28 @@ const Question = () => {
   ];
   return (
     <div className="container">
-      <div className="content" id="question-area">
+      <div
+        className={currentQuestion == questions.length ? "hide" : "content"}
+        id="question-area"
+      >
         <div id="question-text">
           <b>
             <span style={{ fontSize: "20px" }}>Q</span>
-            {index + 1}/{questions.length}:
-          </b>{" "}
+            {index + 1}/{questions.length}:<span> </span>
+          </b>
           {questions[index].question}
         </div>
-        ;
+        <br />
+
         <div className="options">
           <RadioGroup onChange={done}>
             {questions[index].answers.map((answer, i) => {
               return (
-                <RadioButton key={i} value={answer.option}>
+                <RadioButton
+                  key={i}
+                  value={answer.option}
+                  checked={selectedAnswer === answer.option}
+                >
                   {answer.option}
                 </RadioButton>
               );
@@ -98,7 +112,7 @@ const Question = () => {
           to="/result"
           state={{ score: score }}
         >
-          Result
+          Show Result
         </Link>
       </div>
     </div>
