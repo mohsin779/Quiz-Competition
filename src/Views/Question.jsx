@@ -44,9 +44,11 @@ const Question = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [usersAnswers, setUsersAnswers] = useState([]);
+  const [back, setBack] = useState([]);
 
   const onNext = () => {
-    setSelectedAnswer("");
+    // setSelectedAnswer("");
+
     if (index < questions.length - 1) {
       setIndex(index + 1);
     }
@@ -54,10 +56,18 @@ const Question = () => {
     setUsersAnswers(temp);
 
     setCurrentQuestion(currentQuestion + 1);
+    if (back.length > 0) {
+      const old = back.pop();
+      setSelectedAnswer(old);
+    }
   };
   const onPrev = () => {
     if (index > 0) {
       setIndex(index - 1);
+      if (selectedAnswer) {
+        let temp = [...back, selectedAnswer];
+        setBack(temp);
+      }
       setSelectedAnswer(usersAnswers.pop());
       setCurrentQuestion(currentQuestion - 1);
     }
