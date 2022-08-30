@@ -1,8 +1,8 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import Home from "./components/home";
-import Question from "./components/question";
-import Result from "./components/result";
+import Home from "./Views/Home";
+import Question from "./Views/Question";
+import Result from "./Views/Result";
 
 function App() {
   return (

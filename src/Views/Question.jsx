@@ -1,31 +1,8 @@
 import { RadioGroup, RadioButton } from "react-radio-buttons";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Question = () => {
-  const [index, setIndex] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [score, setScore] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState("");
-
-  const onNext = () => {
-    const correctAnswer = questions[index].answers.filter((answer) => {
-      return answer.answer === true;
-    });
-    if (selectedAnswer === correctAnswer[0].option) {
-      setScore(score + 1);
-    }
-    setSelectedAnswer("");
-    if (index < questions.length - 1) {
-      setIndex(index + 1);
-    }
-    setCurrentQuestion(currentQuestion + 1);
-  };
-
-  const done = (ans) => {
-    setSelectedAnswer(ans);
-  };
-
   const questions = [
     {
       question: "Is Udemy the best online learning platform?",
@@ -63,10 +40,37 @@ const Question = () => {
       ],
     },
   ];
+  const [index, setIndex] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [usersAnswers, setUsersAnswers] = useState([]);
+
+  const onNext = () => {
+    setSelectedAnswer("");
+    if (index < questions.length - 1) {
+      setIndex(index + 1);
+    }
+    let temp = [...usersAnswers, selectedAnswer];
+    setUsersAnswers(temp);
+
+    setCurrentQuestion(currentQuestion + 1);
+  };
+  const onPrev = () => {
+    if (index > 0) {
+      setIndex(index - 1);
+      setSelectedAnswer(usersAnswers.pop());
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  const done = (ans) => {
+    setSelectedAnswer(ans);
+  };
+
   return (
     <div className="container">
       <div
-        className={currentQuestion == questions.length ? "hide" : "content"}
+        className={currentQuestion === questions.length ? "hide" : "content"}
         id="question-area"
       >
         <div id="question-text">
@@ -96,21 +100,33 @@ const Question = () => {
       </div>
       <div className="controls">
         <button
-          //   className="btn btn-next"
           className={
-            currentQuestion == questions.length ? "hide" : "btn btn-next"
+            currentQuestion === questions.length ? "hide" : "btn btn-next"
+          }
+          id="next"
+          onClick={onPrev}
+          disabled={currentQuestion === questions.length ? true : false}
+        >
+          Prev
+        </button>
+        <button
+          className={
+            currentQuestion === questions.length ? "hide" : "btn btn-next"
           }
           id="next"
           onClick={onNext}
-          disabled={currentQuestion == questions.length ? true : false}
+          disabled={currentQuestion === questions.length ? true : false}
         >
           Next
         </button>
 
         <Link
-          className={currentQuestion == questions.length ? "btn" : "hide"}
+          className={currentQuestion === questions.length ? "btn" : "hide"}
           to="/result"
-          state={{ score: score }}
+          state={{
+            usersAnswers: usersAnswers,
+            questions: questions,
+          }}
         >
           Show Result
         </Link>
